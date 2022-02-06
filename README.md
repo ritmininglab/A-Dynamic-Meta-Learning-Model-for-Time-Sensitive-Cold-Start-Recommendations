@@ -23,5 +23,12 @@ A novel dynamic recommendation model that focuses on users who have interactions
 * numpy
 * pickle
 
-3. Go to each folders of datasets to run the corresponding experiments: For example ```cd Netflix``` and run ```python proposed_model.py``` for the Netflix dataset
-4. This code is based on ```MeLU```
+## Run
+
+1. Go to each folders of datasets to run the corresponding experiments.
+2. For example ```cd Netflix``` and 
+3. Run ```python proposed_model.py``` for the Netflix dataset
+
+## Base
+
+This code is based on ```MeLU```
