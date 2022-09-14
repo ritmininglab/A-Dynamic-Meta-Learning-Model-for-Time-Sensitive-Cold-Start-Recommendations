@@ -205,7 +205,7 @@ if __name__ == "__main__":
     path = os.getcwd()
     active_user_dict = pickle.load(open('{}/movielens_user_dict.pkl'.format(path), 'rb'))
     active_label_dict = pickle.load(open('{}/movielens_rating_dict.pkl'.format(path), 'rb'))
-    movie_dict = pickle.load(open("{}/embedding/movie_emb_32.pkl".format(path), "rb"))
+    movie_dict = pickle.load(open("{}/f_movie_dict.pkl".format(path), "rb"))
 
     # Consider only those items who have information
     for user, item in active_user_dict.items():
@@ -270,6 +270,7 @@ if __name__ == "__main__":
     for period in range(1, 7):
         user_data = periodic_data[period]
         epoch = 0
+        max_epoch=50
         prev_loss = 999
         previous_loss = 999
         training_loss_p = []
@@ -281,14 +282,14 @@ if __name__ == "__main__":
         # meta optimizer
         meta_optimizer = optim.Adam(ml_ss.parameters(), lr=1e-3, weight_decay=1e-4)
 
-        while epoch <= 1:
+        while epoch <= max_epoch:
             training_loss = []
             if period > 1:
                 # RNN implementation
                 rnn_data = periodic_data[period - 1]
                 rnn_loss = []
 
-                for user in test_user:
+                for user in tt_user:
                     train_x = torch.cat((rnn_data[user][0], rnn_data[user][2]), dim=0)
                     train_y = torch.cat((rnn_data[user][1], rnn_data[user][3]), dim=0)
                     hidden_ = user_dynamics[user]
@@ -383,33 +384,7 @@ if __name__ == "__main__":
         idx_pred = pred_list.argsort()[::-1]
         tot_len = len(idx_pred)
 
-        # precision and recall
-        tp = 0
-        fn = 0
-        fp = 0
-        tn = 0
-        threshold = 4
-        for p, t in zip(pred_list, true_list):
-            if (t >= threshold):
-                if (p >= threshold):
-                    tp = tp + 1
-                else:
-                    fn = fn + 1
-            else:
-                if (p >= threshold):
-                    fp = fp + 1
-                else:
-                    tn = tn + 1
-            if tp == 0:
-                precision = 0
-                recall = 0
-                f1 = 0
-            else:
-                precision = tp / (tp + fp)
-                recall = tp / (tp + fn)
-                f1 = 2 * (precision * recall) / (precision + recall)
-
-        print('Precision:{}, Recall:{}, and F1:{}'.format(precision, recall, f1))
+  
 
         rmse_result = []
         for per in range(1, 10):
@@ -421,18 +396,18 @@ if __name__ == "__main__":
             rmse_result.append(rms)
         print(rmse_result)
 
-        # ndcg
-        top_min = 20
-        top_max = 40
-        array_ndcg = []
+#         # ndcg
+#         top_min = 20
+#         top_max = 40
+#         array_ndcg = []
 
-        for i in range(top_min, top_max, 2):
-            dcg1 = 0
-            dcg2 = 0
-            for j in range(0, i):
-                dcg1 = dcg1 + 1 / log2(1 + idx_pred[j] + 1)
-                dcg2 = dcg2 + 1 / log2(1 + j + 1)
-            ndcg = dcg1 / dcg2
-            array_ndcg.append(ndcg)
-        print('==NDCG==')
-        print(array_ndcg)
+#         for i in range(top_min, top_max, 2):
+#             dcg1 = 0
+#             dcg2 = 0
+#             for j in range(0, i):
+#                 dcg1 = dcg1 + 1 / log2(1 + idx_pred[j] + 1)
+#                 dcg2 = dcg2 + 1 / log2(1 + j + 1)
+#             ndcg = dcg1 / dcg2
+#             array_ndcg.append(ndcg)
+#         print('==NDCG==')
+#         print(array_ndcg)
