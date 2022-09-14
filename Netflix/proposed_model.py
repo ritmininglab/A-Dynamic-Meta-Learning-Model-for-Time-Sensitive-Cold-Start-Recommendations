@@ -229,6 +229,7 @@ if __name__ == "__main__":
     for period in range(1, 17):
         user_data=periodic_data[period]
         epoch = 0
+        max_epoch=50
         previous_loss = 999
         prev_loss = 999
         training_loss_p = []
@@ -240,7 +241,7 @@ if __name__ == "__main__":
         # meta optimizer
         meta_optimizer = optim.Adam(ml_ss.parameters(), lr=1e-4,weight_decay=1e-4)
 
-        while  epoch <= 1:
+        while  epoch <= max_epoch:
             training_loss = []
             if period>1:
                 # RNN implementation
@@ -349,18 +350,18 @@ if __name__ == "__main__":
         print('==RMSE==')
         print(rmse_result)
 
-        # ndcg
-        top_min = 20
-        top_max = 40
-        array_ndcg = []
+#         # ndcg
+#         top_min = 20
+#         top_max = 40
+#         array_ndcg = []
 
-        for i in range(top_min, top_max, 2):
-            dcg1 = 0
-            dcg2 = 0
-            for j in range(0, i):
-                dcg1 = dcg1 + 1 / log2(1 + idx_pred[j]+1)
-                dcg2 = dcg2 + 1 / log2(1 + j + 1)
-            ndcg = dcg1 / dcg2
-            array_ndcg.append(ndcg)
-        print('==NDCG==')
-        print(array_ndcg)
+#         for i in range(top_min, top_max, 2):
+#             dcg1 = 0
+#             dcg2 = 0
+#             for j in range(0, i):
+#                 dcg1 = dcg1 + 1 / log2(1 + idx_pred[j]+1)
+#                 dcg2 = dcg2 + 1 / log2(1 + j + 1)
+#             ndcg = dcg1 / dcg2
+#             array_ndcg.append(ndcg)
+#         print('==NDCG==')
+#         print(array_ndcg)
