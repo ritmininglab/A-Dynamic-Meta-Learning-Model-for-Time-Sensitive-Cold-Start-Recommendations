@@ -1,1 +1,1 @@
-This contains proposed model for movielens dataset
+This folder contains files for a proposed model in movielens dataset
