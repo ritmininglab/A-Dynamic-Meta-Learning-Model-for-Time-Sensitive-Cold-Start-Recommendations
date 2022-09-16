@@ -1,1 +1,1 @@
-This file contains proposed model for last.fm dataset
+This folder contains files for a proposed model in last.fm dataset
